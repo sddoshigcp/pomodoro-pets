@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "pomodoro-pals",
-    "slug": "pomodoro-pals",
+    "name": "pomodoro-pets",
+    "slug": "pomodoro-pets",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
