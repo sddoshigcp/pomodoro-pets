@@ -2,9 +2,13 @@ import React from "react";
 import { View, StyleSheet, Text, Button } from "react-native";
 
 export const Home = ({ navigation }) => {
+
+    const [currency, setCurrency] = React.useState(0);
+
     return (
         <View style={styles.container}>
             <Text>Home Screen</Text>
+            <Text>Currency: {currency}</Text>
             <Button
                 title="Start Session"
                 onPress={() => navigation.navigate("SessionSetup")}
