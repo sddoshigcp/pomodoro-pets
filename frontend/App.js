@@ -30,6 +30,7 @@ import { Collection } from "./src/screens/Collection";
 import { Achievements } from "./src/screens/Achievements";
 import { Settings } from "./src/screens/Settings";
 import { Login } from "./src/screens/Login";
+import { SignUp } from "./src/screens/SignUp";
 
 const Stack = createNativeStackNavigator();
 
@@ -92,6 +93,11 @@ const MyStack = () => {
                     name="Settings"
                     component={Settings}
                     options={{ title: "Settings" }}
+                />
+                <Stack.Screen
+                    name="SignUp"
+                    component={SignUp}
+                    options={{ title: "SignUp" }}
                 />
             </Stack.Navigator>
         </NavigationContainer>

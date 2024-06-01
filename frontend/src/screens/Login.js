@@ -63,6 +63,7 @@ export const Login = ({ navigation }) => {
             />
 
             <Button title="Log In" onPress={handleLogin} />
+            <Button title="Sign Up" onPress={() => navigation.navigate("SignUp")} />
         </View>
     );
 };

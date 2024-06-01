@@ -5,8 +5,9 @@ const apiRouter = express.Router();
 const db = require("./database/DBConnection");
 
 //Security stuff?
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+
+const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 /*************************************** MOCK ***************************************/
@@ -63,13 +64,13 @@ apiRouter.post("/users", (req, res) => {
                     0,
                 ]
             )
-            .then((result) => {
-                res.send(result);
-            })
-            .catch((err) => {
-                res.status(500);
-                res.send(err);
-            });
+                .then((result) => {
+                    res.send(result);
+                })
+                .catch((err) => {
+                    res.status(500);
+                    res.send(err);
+                });
         }
     });
 });
@@ -82,21 +83,15 @@ apiRouter.put("/users/:id", (req, res) => {
         } else {
             db.query(
                 "UPDATE users SET Username = ?, Password = ?, ModifiedLast = ?, ModifiedBy = ? WHERE id = ?",
-                [
-                    Username,
-                    hashedPassword,
-                    new Date(),
-                    0,
-                    req.params.id,
-                ]
+                [Username, hashedPassword, new Date(), 0, req.params.id]
             )
-            .then((result) => {
-                res.send(result);
-            })
-            .catch((err) => {
-                res.status(500);
-                res.send(err);
-            });
+                .then((result) => {
+                    res.send(result);
+                })
+                .catch((err) => {
+                    res.status(500);
+                    res.send(err);
+                });
         }
     });
 });
@@ -199,12 +194,7 @@ apiRouter.put("/profiles/:id/points", (req, res) => {
 apiRouter.put("/profiles/:id/totalminutes", (req, res) => {
     db.query(
         "UPDATE Profiles SET TotalMinutes = TotalMinutes + ?, ModifiedLast = ?, ModifiedBy = ? WHERE Id = ?",
-        [
-            req.body.TotalMinutes,
-            new Date(),
-            req.body.ModifiedBy,
-            req.params.id,
-        ]
+        [req.body.TotalMinutes, new Date(), req.body.ModifiedBy, req.params.id]
     )
         .then((result) => {
             res.send(result);
@@ -219,12 +209,7 @@ apiRouter.put("/profiles/:id/totalminutes", (req, res) => {
 apiRouter.put("/profiles/:id/minutestoday", (req, res) => {
     db.query(
         "UPDATE Profiles SET MinutesToday = MinutesToday + ?, ModifiedLast = ?, ModifiedBy = ? WHERE Id = ?",
-        [
-            req.body.MinutesToday,
-            new Date(),
-            req.body.ModifiedBy,
-            req.params.id,
-        ]
+        [req.body.MinutesToday, new Date(), req.body.ModifiedBy, req.params.id]
     )
         .then((result) => {
             res.send(result);
@@ -258,42 +243,56 @@ apiRouter.put("/profiles/:id/minutesweek", (req, res) => {
 /*************************************** Login ***************************************/
 
 // Login route
-apiRouter.post('/login', (req, res) => {
+apiRouter.post("/login", (req, res) => {
+
     const { Username, Password } = req.body;
 
     // Fetch the user from the database
-    db.query('SELECT * FROM users WHERE Username = ?', [Username])
-        .then(users => {
-            if (users.length > 0) {
-                const user = users[0];
+    db.query("SELECT * FROM users WHERE Username = ?", [Username])
+        .then((users) => {
+
+            if (users.results.length > 0) {
+                const user = users.results[0];
+
+                console.log("user:", user)
 
                 // Compare the provided password with the stored hashed password
                 bcrypt.compare(Password, user.Password, (err, result) => {
+
+                    console.log("password: " , Password)
+                    console.log("user.Password: ", user.Password)
+                    console.log("result: ", result)
+                        
                     if (result) {
                         // Passwords match, generate a JWT
-                        const token = jwt.sign({ id: user.id }, 'your-secret-key', { expiresIn: '1h' });
+                        const token = jwt.sign(
+                            { id: user.id },
+                            process.env.JWT_SECRET,
+                            { expiresIn: "1h" }
+                        );
 
                         res.json({ token });
                     } else {
                         // Passwords don't match
-                        res.status(401).send('Invalid credentials');
+                        res.status(401).json({
+                            message: "Invalid credentials",
+                        });
                     }
                 });
             } else {
                 // User not found
-                res.status(404).send('User not found');
+                res.status(404).json({ message: "User not found" });
             }
         })
-        .catch(err => {
-            res.status(500).send(err);
+        .catch((err) => {
+            res.status(500).json({ error: err });
         });
 });
 
 // Logout route
-apiRouter.post('/logout', (req, res) => {
+apiRouter.post("/logout", (req, res) => {
     // In a real-world application, you might want to add the token to a "blacklist" to prevent it from being used again
-    res.json({ message: 'Logged out' });
+    res.json({ message: "Logged out" });
 });
-
 
 module.exports = apiRouter;
