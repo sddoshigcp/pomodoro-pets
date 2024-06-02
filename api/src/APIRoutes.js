@@ -254,15 +254,9 @@ apiRouter.post("/login", (req, res) => {
             if (users.results.length > 0) {
                 const user = users.results[0];
 
-                console.log("user:", user)
-
                 // Compare the provided password with the stored hashed password
                 bcrypt.compare(Password, user.Password, (err, result) => {
 
-                    console.log("password: " , Password)
-                    console.log("user.Password: ", user.Password)
-                    console.log("result: ", result)
-                        
                     if (result) {
                         // Passwords match, generate a JWT
                         const token = jwt.sign(

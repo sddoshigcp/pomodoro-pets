@@ -1,6 +1,8 @@
 import {React, useState} from "react";
 import { View, StyleSheet, Text, Button, TextInput } from "react-native";
 
+const SERVER_ROUTE = `http://localhost:3001/api`;
+
 export const SignUp = ({ navigation }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -17,8 +19,10 @@ export const SignUp = ({ navigation }) => {
         }
     
         try {
+            let route = SERVER_ROUTE + "/users";
+
             // API call to create a user
-            const response = await fetch('http://localhost:5000/users', {
+            const response = await fetch(route, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -35,15 +39,20 @@ export const SignUp = ({ navigation }) => {
                 alert(data.error);
                 return;
             }
+
+            console.log("User created:", data)
+            console.log("User ID:", data.results.insertId)
+
+            route = SERVER_ROUTE + "/profiles";
     
             // API call to create a profile
-            const profileResponse = await fetch('http://localhost:5000/profiles', {
+            const profileResponse = await fetch(route, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    UserId: data.id,
+                    UserId: data.results.insertId,
                     PomodoroPoints: 0,
                     TotalMinutes: 0,
                     MinutesToday: 0,

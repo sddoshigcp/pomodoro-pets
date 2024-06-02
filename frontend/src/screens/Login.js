@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, Button, TextInput } from "react-native";
 
-// Import the .env file
 const SERVER_ROUTE = `http://localhost:3001/api`;
 
 export const Login = ({ navigation }) => {
