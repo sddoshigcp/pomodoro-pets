@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, Button, TextInput } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SERVER_ROUTE = `http://localhost:3001/api`;
 
@@ -14,7 +15,7 @@ export const Login = ({ navigation }) => {
         //get SERVER_ROUTE from .env
         const route = SERVER_ROUTE + "/login";
 
-        console.log("route:", route)
+        console.log("route:", route);
 
         fetch(route, {
             method: "POST",
@@ -27,9 +28,14 @@ export const Login = ({ navigation }) => {
             }),
         })
             .then((response) => response.json())
-            .then((data) => {
+            .then(async (data) => {
                 if (data.token) {
+                    console.log("data:", data)
+
                     // Save the token in your state or in AsyncStorage for future requests
+                    await AsyncStorage.setItem('token', data.token);
+                    await AsyncStorage.setItem('user', JSON.stringify(data.user));
+
                     // Navigate to the home screen
                     navigation.navigate("Home");
                 } else {

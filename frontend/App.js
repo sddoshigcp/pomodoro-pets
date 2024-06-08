@@ -39,7 +39,7 @@ const MyStack = () => {
     const [currentSubject, setCurrentSubject] = useState("test");
     const [colorMode, setColorMode] = useState("dark");
     const [history, setHistory] = useState([]);
-    
+
 
     return (
         <NavigationContainer
@@ -49,6 +49,11 @@ const MyStack = () => {
             ]}
         >
             <Stack.Navigator>
+                <Stack.Screen
+                    name="Login"
+                    component={Login}
+                    options={{ title: "Login" }}
+                />
                 <Stack.Screen
                     name="Home"
                     component={Home}
@@ -68,11 +73,6 @@ const MyStack = () => {
                     name="Gacha"
                     component={Gacha}
                     options={{ title: "Gacha" }}
-                />
-                <Stack.Screen
-                    name="Login"
-                    component={Login}
-                    options={{ title: "Login" }}
                 />
                 <Stack.Screen
                     name="SessionDetails"

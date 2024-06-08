@@ -265,7 +265,11 @@ apiRouter.post("/login", (req, res) => {
                             { expiresIn: "1h" }
                         );
 
-                        res.json({ token });
+                        // Remove sensitive data
+                        delete user.Password;
+
+                        // Return the token and user data
+                        res.json({ token, user });
                     } else {
                         // Passwords don't match
                         res.status(401).json({
@@ -282,6 +286,7 @@ apiRouter.post("/login", (req, res) => {
             res.status(500).json({ error: err });
         });
 });
+
 
 // Logout route
 apiRouter.post("/logout", (req, res) => {
