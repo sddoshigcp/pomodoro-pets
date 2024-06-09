@@ -15,7 +15,7 @@ export const Home = ({ navigation }) => {
             setToken(token);
         });
     }, []);
-    
+
     useEffect(() => {
         if (user) {
             fetchProfile(token);
@@ -26,17 +26,15 @@ export const Home = ({ navigation }) => {
         const token = await AsyncStorage.getItem('token');
         const user = await AsyncStorage.getItem('user');
         setUser(JSON.parse(user));
-        console.log("user (state): ", user);
         setToken(token);
         return token;
     };
 
     const fetchProfile = async (token) => {
-        console.log("userrrr: " , user)
 
         let userId = user.Id;
 
-        const route = SERVER_ROUTE + `/profiles/${userId}`;
+        const route = SERVER_ROUTE + `/profiles/user/${userId}`;
 
         fetch(route, {
             method: "GET",
@@ -48,8 +46,7 @@ export const Home = ({ navigation }) => {
 
             .then((response) => response.json())
             .then((data) => {
-                console.log("Profile data: ", data);
-                setProfile(data);
+                setProfile(data.results[0]);
             })
             .catch((error) => {
                 console.error("Error:", error);

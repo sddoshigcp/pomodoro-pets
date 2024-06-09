@@ -98,10 +98,24 @@ apiRouter.put("/users/:id", (req, res) => {
 
 /*************************************** Profile ***************************************/
 
-// Get a profile
+//get a profile by profile id
 apiRouter.get("/profiles/:id", (req, res) => {
     db.query("SELECT * FROM Profiles WHERE Id = ?", [req.params.id])
         .then((result) => {
+            res.send(result);
+        })
+        .catch((err) => {
+            res.status(500);
+            res.send(err);
+        });
+});
+
+// Get a profile by userid
+apiRouter.get("/profiles/user/:userid", (req, res) => {
+    db.query("SELECT * FROM Profiles WHERE UserId = ?", [req.params.userid])
+        .then((result) => {
+
+            console.log("result: ", result)
             res.send(result);
         })
         .catch((err) => {
